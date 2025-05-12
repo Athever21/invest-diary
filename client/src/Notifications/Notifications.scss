@@ -1,0 +1,21 @@
+.notification {
+    position: absolute;
+    top: 1rem;
+    left: calc(50% - 15vw);
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    border-radius: 10px;
+    width: 30vw;
+}
+
+.success {
+    background: #089767;
+}
+
+.fail {
+    background: #a30719;
+}
+

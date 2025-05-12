@@ -1,0 +1,57 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: ./client
+        target: /srv/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: "npm run dev"
+    depends_on:
+      - auth
+
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    image: nodejs
+    container_name: auth
+    restart: unless-stopped
+    env_file: ./.env
+    volumes:
+      - ./auth:/auth/src/app
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=$MYSQLDB_USER
+      - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - DB_NAME=$MYSQLDB_DATABASE
+      - DB_PORT=$MYSQLDB_DOCKER_PORT
+      - PORT=$NODE_LOCAL_PORT
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    stdin_open: true
+    tty: true
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:9.2
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/mysql
+    
+volumes: 
+  db:

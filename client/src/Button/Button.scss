@@ -1,0 +1,30 @@
+.button {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    outline: none;
+    border: 0;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.button-login {
+    background: #141414;
+    color: #dfdfdf;
+}
+
+.button-login:hover {
+    background: #252525;
+}
+
+.button-logout {
+    background: none;
+    color: #b61e1e;
+}
+
+.button-logout:hover {
+    text-decoration: underline;
+    color: #cc110a;
+}

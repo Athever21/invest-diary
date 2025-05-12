@@ -1,0 +1,15 @@
+.login-container {
+    display: flex;
+}
+
+.login-signin,
+.login-signup {
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+}
+
+.login-signin:hover,
+.login-signup:hover {
+    background: rgba(230, 230, 230, 0.5);
+    cursor: pointer;
+}

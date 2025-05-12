@@ -1,0 +1,78 @@
+.input-container {
+    width: 100%;
+}
+
+.fieldset {
+    position: relative;
+    border: 1px solid #7e7c7c;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.input {
+    border: 0;
+    background: none;
+    outline: none;
+    padding: 0.5rem;
+    color: #dedede;
+    width: 100%;
+}
+
+.input::placeholder {
+    color: #dedede;
+}
+
+.input-legend {
+    position: absolute;
+    top: -0.8rem;
+    left: 1rem;
+    font-size: 1rem;
+    font-weight: normal;
+    color: #dedede;
+    animation-name: input-legend;
+    animation-duration: 0.1s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.input-container legend {
+    color: #dedede;
+    margin: 0 0.5rem;
+    padding: 0 0.5rem;
+    opacity: 0;
+    font-size: 0.8rem;
+    animation-name: input-legend-show;
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.05s;
+    animation-delay: 0.1s;
+    animation-fill-mode: forwards;
+}
+
+.field-error {
+    padding: 0.2rem;
+    font-size: 0.9rem;
+    color: #af2828;
+}
+
+@keyframes input-legend {
+    from {
+        top: 10px;
+    }
+
+    to {
+        top: -20px;
+        font-size: 0.8rem;
+        display: none;
+    }
+}
+
+@keyframes input-legend-show {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        
+        opacity: 1;
+    }
+}
