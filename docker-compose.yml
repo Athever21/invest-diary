@@ -20,7 +20,7 @@ services:
     build:
       context: ./auth
       dockerfile: Dockerfile
-    image: nodejs
+    image: auth-service
     container_name: auth
     restart: unless-stopped
     env_file: ./.env
@@ -33,12 +33,21 @@ services:
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
       - PORT=$NODE_LOCAL_PORT
+      - RABBITMQ_URL=$RABBITMQ_URL
+      - REDIS_PASSWORD=$REDIS_PASSWORD
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
     ports:
       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
     stdin_open: true
     tty: true
     depends_on:
-      - mysql
+      mysql:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
   mysql:
     image: mysql:9.2
@@ -52,6 +61,87 @@ services:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
       - db:/var/lib/mysql
-    
-volumes: 
+
+  trades:
+    build:
+      context: ./trades
+      dockerfile: Dockerfile
+    image: trades-service
+    container_name: trades
+    restart: unless-stopped
+    env_file: ./.env
+    volumes:
+      - ./trades:/trades/src/app
+    environment:
+      - MONGO_DB_URL=$MONGODB_URL
+      - MONGO_DB_NAME=$MONGO_DB_NAME
+      - RABBITMQ_URL=$RABBITMQ_URL
+      - PORT=$TRADES_NODE_LOCAL_PORT
+      - CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
+      - CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY
+      - CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET
+    ports:
+      - $TRADES_NODE_LOCAL_PORT:$TRADES_NODE_DOCKER_PORT
+    stdin_open: true
+    tty: true
+    depends_on:
+      mongodb:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '$MONGO_DB_PORT:$MONGO_DB_PORT'
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+    env_file:
+      - ./.env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    env_file:
+      - ./.env
+    environment:
+      RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
+      RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
+    volumes:
+      - rabbitmq-lib:/var/lib/rabbitmq/
+      - rabbitmq-log:/var/log/rabbitmq
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    env_file:
+      - ./.env
+    command: redis-server --save 20 1 --loglevel warning --requirepass $REDIS_PASSWORD
+    volumes: 
+      - redis:/data
+
+volumes:
   db:
+  mongo-data:
+  mongo-config:
+  rabbitmq_data:
+  rabbitmq-lib:
+    driver: local
+  rabbitmq-log:
+    driver: local
+  redis:

@@ -6,10 +6,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { IsUnique } from './common/validators/IsUnique';
 import { User } from './users/users.entity';
 import { AuthModule } from './auth/auth.module';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { ConfigModule } from '@nestjs/config'
+import { CacheModule } from '@nestjs/cache-manager';
+import { RedisOptions } from './redisOptions';
 
 @Module({
   imports: 
     [
+      ConfigModule.forRoot({ isGlobal: true }),
       UsersModule,
       AuthModule,
       TypeOrmModule.forRoot({
@@ -21,9 +26,18 @@ import { AuthModule } from './auth/auth.module';
         database: process.env.DB_NAME,
         entities: [User],
         synchronize: true
-      })
+      }),
+      RabbitMQModule.forRoot({
+        exchanges: [{
+          name: 'auth',
+          type: 'direct'
+        }],
+        uri: process.env.RABBITMQ_URL as string,
+        connectionInitOptions: { wait: true }
+      }),
+      CacheModule.registerAsync(RedisOptions)
     ],
   controllers: [AppController],
-  providers: [AppService, IsUnique],
+  providers: [AppService, IsUnique]
 })
 export class AppModule {}

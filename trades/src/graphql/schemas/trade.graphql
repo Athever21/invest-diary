@@ -1,0 +1,62 @@
+scalar Upload
+scalar Date
+
+directive @constraint(min: Int, max: Int) on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
+type Image {
+    url: String!
+}
+
+enum TradeStatus {
+    OPEN,
+    CLOSED
+}
+
+input Trade {
+    title: String,
+    asset: String!,
+    enterDate: Date,
+    closeDate: Date,
+    status: TradeStatus, 
+    enterPrice: Float!,
+    closePrice: Float!,
+    volume: Float!,
+    images: [Upload]
+}
+
+type TradeResponse {
+    id: String,
+    title: String,
+    asset: String,
+    enterDate: Date,
+    closeDate: Date,
+    enterPrice: Float,
+    closePrice: Float,
+    volume: Float,
+    images: [Image]
+}
+
+type PaginatedTrades {
+    trades: [TradeResponse!]!
+    totalItems: Int!
+    totalPages: Int!
+    currentPage: Int!
+}
+
+type TradeFilters {
+    page: Int!, @constraint(min: 1)
+    pageSize: Int! @constraint(min: 1, max: 100)
+    search: String,
+    status: TradeStatus,
+    enterDate: Date,
+    closeDate: Date
+}
+
+type Query {
+    getAllTrades: [TradeResponse]!
+    getUserTrades(filters: TradeFilters!): PaginatedTrades!
+}
+
+type Mutation {
+    createTrade(trade: Trade!): TradeResponse!
+}

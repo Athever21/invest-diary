@@ -19,14 +19,12 @@ export class AuthController {
     @Post('/refresh_token')
     async refreshToken(@Req() req: Request) {
         const [accessToken, tokenPayload] = await this.authService.refreshToken(req);
-        console.log("token refereshed")
+
         return { success: 'ok', accessToken, tokenPayload };
     }
 
     @Post('/logout')
     async logout(@Res() res: Response) {
-        console.log("clear oockiea")
-
         return res
             .cookie('refreshToken', null, { httpOnly: true, sameSite: 'strict', maxAge: 0 })
             .json({ success: 'ok' })

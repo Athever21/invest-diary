@@ -8,6 +8,7 @@ const AuthContext = createContext({} as AuthContext);
 const AuthProvider = ({ children }: Props) => {
     const [token, setToken] = useState("");
     const [user, setUser] = useState({} as User);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const getToken = async () => {
         try {
@@ -15,6 +16,7 @@ const AuthProvider = ({ children }: Props) => {
 
             setToken(res.data.accessToken);
             setUser(res.data.tokenPayload);
+            setIsLoggedIn(true);
         } catch (err) { }
     }
 
@@ -24,23 +26,29 @@ const AuthProvider = ({ children }: Props) => {
 
             setToken("");
             setUser({} as User);
-        } catch (err) {}
+            setIsLoggedIn(false);
+        } catch (err) { }
     }
 
     const login = (token: string, user: User) => {
         setToken(token);
         setUser(user);
+        setIsLoggedIn(true);
 
         eventEmitter.emit(Events.HIDE_MODAL);
     }
 
     useEffect(() => {
         getToken();
+
+        const interval = setInterval(getToken, 55 * 60 * 1000);
+
+        return () => clearInterval(interval);
     }, [])
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <AuthContext.Provider value={{ token, user, logout, login }}>
+            <AuthContext.Provider value={{ token, user, logout, login, isLoggedIn }}>
                 {children}
             </AuthContext.Provider>
         </Suspense>
@@ -60,6 +68,7 @@ type User = {
 type AuthContext = {
     token: string,
     user: User,
+    isLoggedIn: boolean,
     logout: Function,
     login: Function
 }

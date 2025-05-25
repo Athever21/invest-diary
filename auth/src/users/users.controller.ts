@@ -1,12 +1,12 @@
 import { Controller, Body, Post  } from "@nestjs/common";
-import { usersSerivce } from "./users.service";
+import { UsersSerivce } from "./users.service";
 import { UserCreate } from "./users.model";
 
 @Controller({
     path: '/user'
 })
 export class UsersController {
-    constructor(private readonly usersSerivce: usersSerivce) {}
+    constructor(private readonly usersSerivce: UsersSerivce) {}
 
     @Post()
     async register(@Body() userCreate: UserCreate) {
