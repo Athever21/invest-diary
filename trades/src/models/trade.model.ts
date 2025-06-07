@@ -29,7 +29,7 @@ const TradeSchema = new Schema<ITrade>({
     userId: {
         type: String,
         required: true,
-        unique: true
+        index: true
     },
     status: {
         type: String,
@@ -44,7 +44,5 @@ const TradeSchema = new Schema<ITrade>({
     volume: Number,
     images: [Image]
 });
-
-TradeSchema.index({ userId: 1}, { unique: true });
 
 export const Trade = mongoose.model<ITrade>('Trade', TradeSchema);

@@ -1,31 +1,40 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Filters {
-  status?: string;
+export interface Filters {
   search?: string;
-  fromDate?: string;
-  toDate?: string;
-}
-
-interface TradeFiltersState {
-  filters: Filters;
+  enterDate?: string;
+  closeDate?: string;
   page: number;
   pageSize: number;
+  status?: "OPEN" | "CLOSED";
 }
 
-const initialState: TradeFiltersState = {
-  filters: {},
+export type SelectOption<T> = {
+  label: string;
+  value: T;
+};
+
+const initialState: Filters = {
   page: 1,
   pageSize: 10,
 };
 
+const setFilterF = <K extends keyof Filters>(
+  state: Filters,
+  action: PayloadAction<{ name: K; value: Filters[K] }>
+) => {
+  state[action.payload.name] = action.payload.value;
+}
+
 const tradeFiltersSlice = createSlice({
-  name: 'tradeFilters',
+  name: 'filters',
   initialState,
   reducers: {
+    setFilter: setFilterF,
     setFilters(state, action: PayloadAction<Filters>) {
-      state.filters = action.payload;
+      state = action.payload;
       state.page = 1;
+      state.pageSize = 10;
     },
     setPage(state, action: PayloadAction<number>) {
       state.page = action.payload;
@@ -36,5 +45,5 @@ const tradeFiltersSlice = createSlice({
   },
 });
 
-export const { setFilters, setPage, setPageSize } = tradeFiltersSlice.actions;
+export const { setFilters, setPage, setPageSize, setFilter } = tradeFiltersSlice.actions;
 export default tradeFiltersSlice.reducer;

@@ -1,7 +1,7 @@
 import { TradeStatus } from "@/models/trade.model";
 import { PaginationsArgs } from "./paginationArgs";
 
-type TradeFilters =  PaginationsArgs & {
+export type TradeFilters =  PaginationsArgs & {
     search: string,
     status: TradeStatus,
     enterDate: Date,

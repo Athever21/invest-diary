@@ -1,0 +1,30 @@
+.trade {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e4e9e7;
+    border-radius: 5px;
+}
+
+.trade-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.CLOSED {
+    color: #bb3c2b;
+}
+
+.OPEN {
+    color: #129946;
+}
+
+.trade:hover {
+    background: rgba($color: #fff, $alpha: .1);
+}
+
+.trade a {
+    color: #dfdfdf;
+    text-decoration: none;
+}

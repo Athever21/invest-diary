@@ -11,6 +11,15 @@ export class TradeRepository {
         return await Trade.find({});
     }
 
+    static async getById(id: string, userId: string) {
+        const trades = await Trade.find({
+            userId,
+            _id: id
+        });
+
+        return trades.length ? trades[0] : null;
+    }
+
     static async getPaginatedResult(filters: FilterQuery<ITrade>, page = 1, pageSize = 10) {
         const skip = (page - 1) * pageSize;
         const totalItems = await Trade.countDocuments(filters);

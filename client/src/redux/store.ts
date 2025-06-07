@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
+import tradeFilters from './tradeFiltersSlice';
 
 export const store = configureStore({
     reducer: {
-
+        tradeFilters: tradeFilters
     }
 });
 

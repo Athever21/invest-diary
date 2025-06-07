@@ -5,6 +5,7 @@ directive @constraint(min: Int, max: Int) on ARGUMENT_DEFINITION | INPUT_FIELD_D
 
 type Image {
     url: String!
+    name: String
 }
 
 enum TradeStatus {
@@ -19,7 +20,7 @@ input Trade {
     closeDate: Date,
     status: TradeStatus, 
     enterPrice: Float!,
-    closePrice: Float!,
+    closePrice: Float,
     volume: Float!,
     images: [Upload]
 }
@@ -28,6 +29,7 @@ type TradeResponse {
     id: String,
     title: String,
     asset: String,
+    status: TradeStatus,
     enterDate: Date,
     closeDate: Date,
     enterPrice: Float,
@@ -43,7 +45,7 @@ type PaginatedTrades {
     currentPage: Int!
 }
 
-type TradeFilters {
+input TradeFilters {
     page: Int!, @constraint(min: 1)
     pageSize: Int! @constraint(min: 1, max: 100)
     search: String,
@@ -55,6 +57,7 @@ type TradeFilters {
 type Query {
     getAllTrades: [TradeResponse]!
     getUserTrades(filters: TradeFilters!): PaginatedTrades!
+    getUserTrade(tradeId: String!): TradeResponse
 }
 
 type Mutation {

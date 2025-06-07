@@ -1,8 +1,9 @@
-import { createTrade, getAllTrades, getUserTrades } from "@/services/trade"
+import { createTrade, getAllTrades, getUserTrades, getUserTrade } from "@/services/trade"
 
 export const Query = {
     getAllTrades,
-    getUserTrades
+    getUserTrades,
+    getUserTrade
 }
 
 export const Mutation = {

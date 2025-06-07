@@ -1,13 +1,13 @@
 import { uploadToCloudinary } from "@/cloudinary/upload";
 import { CreatTradeInput } from "@/dto/createTrade";
-import { PaginationsArgs } from "@/dto/paginationArgs";
 import { TradeFiltersInput } from "@/dto/tradeFilters";
+import { TradeFilter } from "@/filters/tradeFilters";
 import { TradeRepository } from "@/repositories/trade";
 import { Context } from "@/types";
 
-export const createTrade = async (_:any, { trade }: CreatTradeInput, ctx: Context) => {
-    
-    const images = await Promise.all(trade.images.map(async(image) => await uploadToCloudinary(image)));
+export const createTrade = async (_: any, { trade }: CreatTradeInput, ctx: Context) => {
+
+    const images = await Promise.all(trade.images.map(async (image) => await uploadToCloudinary(image)));
 
     const newTradeParams = {
         ...trade,
@@ -20,23 +20,18 @@ export const createTrade = async (_:any, { trade }: CreatTradeInput, ctx: Contex
     return newTrade;
 }
 
-export const getAllTrades = async() => {
-    return await TradeRepository.getAll()
+export const getAllTrades = async () => {
+    return await TradeRepository.getAll();
 }
 
-export const getUserTrades = async(_: any, { filters }: TradeFiltersInput, ctx: Context) => {
+export const getUserTrades = async (_: any, { filters }: TradeFiltersInput, ctx: Context) => {
     const { page, pageSize } = filters;
 
-    const userFilters = {
-        userId: ctx.user.userId
-    }
+    const filter = new TradeFilter({ ...filters, userId: ctx.user.userId }).build();
 
-    const inputFilters = gatherFilters();
-    
-
-    return await TradeRepository.getPaginatedResult(userFilters, page, pageSize);
+    return await TradeRepository.getPaginatedResult(filter, page, pageSize);
 }
 
-const gatherFilters = () => {
-
+export const getUserTrade = async(_: any, { tradeId }: { tradeId: string }, ctx: Context) => {
+    return await TradeRepository.getById(tradeId, ctx.user.userId);
 }

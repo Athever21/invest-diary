@@ -1,0 +1,33 @@
+.single-trade {
+    width: 80%;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.property {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.single-trade .date-name,
+.property-label {
+    font-weight: bold;
+}
+
+.single-trade-header {
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.single-trade-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
