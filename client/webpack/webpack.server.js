@@ -9,7 +9,9 @@ module.exports = {
     path: path.resolve(__dirname, "../build/server"),
     filename: "server.js",
   },
-  externals: [nodeExternals()],
+  externals: [nodeExternals({
+    allowlist: ['react-datepicker/dist/react-datepicker.css']
+  })],
   devtool: "inline-source-map",
   module: {
     rules: [

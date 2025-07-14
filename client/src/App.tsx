@@ -1,6 +1,5 @@
 import React from "react";
 import { Provider } from 'react-redux';
-import { HashRouter  } from "react-router-dom";
 
 import "./App.scss"
 import { store } from "./redux/store";
@@ -18,12 +17,10 @@ const App = () => {
       <AuthProvider>
         <ApolloWrapper>
           <Provider store={store}>
-            <HashRouter >
-              <Notifications />
-              <Header />
-              <Main />
-              <Modal />
-            </HashRouter>
+            <Notifications />
+            <Header />
+            <Main />
+            <Modal />
           </Provider>
         </ApolloWrapper>
       </AuthProvider>

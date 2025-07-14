@@ -22,7 +22,7 @@ const Notifications = () => {
         setTimeout(() => setNotification(""), time * 1000);
     }
 
-    if (!notification) return [];
+    if (!notification) return <></>;
 
     return (
         <div className={`notification ${notificationType}`}>

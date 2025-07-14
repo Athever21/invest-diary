@@ -7,7 +7,7 @@ const AuthContext = createContext({} as AuthContext);
 
 const AuthProvider = ({ children }: Props) => {
     const [token, setToken] = useState("");
-    const [user, setUser] = useState({} as User);
+    const [user, setUser] = useState<User | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const getToken = async () => {
@@ -25,7 +25,7 @@ const AuthProvider = ({ children }: Props) => {
             await axios.post('http://localhost:6868/auth/logout', null, { withCredentials: true });
 
             setToken("");
-            setUser({} as User);
+            setUser(null);
             setIsLoggedIn(false);
         } catch (err) { }
     }
@@ -67,7 +67,7 @@ type User = {
 
 type AuthContext = {
     token: string,
-    user: User,
+    user: User | null,
     isLoggedIn: boolean,
     logout: Function,
     login: Function

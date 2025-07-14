@@ -24,6 +24,7 @@
         "client/*"
       ]
     },
+    "types": ["jest", "@testing-library/jest-dom"]
   },
   "include": [
     "server/**/*",

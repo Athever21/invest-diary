@@ -11,7 +11,7 @@ const Auth = () => {
     return (
         <div>
             {
-                (user.username) ? <UserHeader /> : <Login />
+                (user) ? <UserHeader /> : <Login />
             }
         </div>
     )

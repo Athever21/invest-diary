@@ -1,18 +1,19 @@
 import React from "react";
 import ReactDOM from 'react-dom/client';
 import App from "./App";
+import { HashRouter } from "react-router-dom";
 
 const rootElement = document.getElementById('root')!;
 
 const reactRoot = ReactDOM.createRoot(rootElement);
-reactRoot.render(<App />)
+reactRoot.render(<HashRouter><App /></HashRouter>)
 
 //@ts-ignore
 if (module.hot) {
     //@ts-ignore
     module.hot.accept('./App', () => {
         const reactRoot = ReactDOM.createRoot(rootElement);
-        reactRoot.render(<App />)
+        reactRoot.render(<HashRouter><App /></HashRouter>)
     });
 }
 

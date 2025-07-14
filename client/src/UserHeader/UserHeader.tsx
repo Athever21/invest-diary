@@ -11,7 +11,7 @@ const UserHeader = () => {
     
     return (
         <div className="user-header">
-            <p>{user.username}</p>
+            <p>{user?.username}</p>
             <Button type={ButtonTypes.Logout} onClick={async() => await logout()}>logout</Button>
         </div>
     )

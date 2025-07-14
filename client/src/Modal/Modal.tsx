@@ -9,7 +9,7 @@ import SignUpModal from '../SignUpModal/SignUpModal';
 
 const Modal = () => {
     const [isVisible, setIsVisible] = useState(0);
-    const [modalType, setModalType] = useState(null as unknown as ModalTypes);
+    const [modalType, setModalType] = useState<ModalTypes | null>(null);
     
     useEffect(() => {
         eventEmitter.on(Events.SHOW_MODAL, showModal);
@@ -39,7 +39,7 @@ const Modal = () => {
     if (!isVisible) return <></>;
 
     return (
-        <div className='modal-conatiner' close-modal="1" onClick={closeModal}>
+        <div className='modal-contianer' close-modal="1" onClick={closeModal}>
             <div className='modal-content'>
                 {modalType == ModalTypes.SIGN_IN && <SignInModal />}
                 {modalType == ModalTypes.SIGN_UP && <SignUpModal />}
